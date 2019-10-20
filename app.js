@@ -14,7 +14,13 @@ function loadEventListeners(){
   // Add task event
 
   form.addEventListener('submit',addTask);
-
+  //need event delegation  Remove task event
+  taskList.addEventListener('click',removeTask);
+  // clear task event
+  clearBtn.addEventListener('click',clearTasks);
+  // Filter tasks event
+  filter.addEventListener('keyup', filterTasks);
+  
 
 } 
 
@@ -37,7 +43,7 @@ function addTask(e){
   // Add Class
   link.className='delete-item secondary-content';
   // Add icon html
-  link.innerHTML = '<i class = "fa fa-remove"></i>';
+  link.innerHTML = '<i class="fa fa-times"></i>';
   // Append the link to li
   li.appendChild(link);
 
@@ -49,4 +55,52 @@ function addTask(e){
 
   e.preventDefault();
 
+}
+
+// Remove Task
+function removeTask(e){
+  //event delegation (when click the collection)
+  if(e.target.parentElement.classList.contains('delete-item')){
+    
+  //parent to the parent to get the li
+    if(confirm('Are You Sure?')){
+      e.target.parentElement.parentElement.remove();
+    }
+  
+  }
+}
+
+// Clear Task
+function clearTasks(){
+  //taskList.innerHTML = '';
+
+  //Faster
+  while(taskList.firstChild){
+    //remove all child of the task;
+    taskList.removeChild(taskList.firstChild);
+  }
+
+  //innerhtml-vs-removechild 
+}
+
+// Filter Tasks
+function filterTasks(e){
+  //get the text
+  const text = e.target.value.toLowerCase();
+
+  console.log(text)
+
+  //node list 
+  document.querySelectorAll('.collection-item').forEach(function(task){
+    const item = task.firstChild.textContent;
+    //items
+    //match the item we put in the value (si encuentra algun index existente muestra el task;)
+    if(item.toLowerCase().indexOf(text) != -1){
+      //show item
+      task.style.display = 'block';
+    }else{
+      //hide item
+      task.style.display = 'none';
+    }
+  })
 }
